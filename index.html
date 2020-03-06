@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    </head>
+    <body>
+        <section data-role="page" id="contactList" data-transition="flip" data-add-back-btn="true">
+            <header data-role="header">
+                <a href="#newContactPage" data-icon="plus">Add</a>
+                <h1> Contact List</h1>
+            </header>
+            <article data-role="content">
+                <form class="ui-filterable">
+                    <input id="filterBasic-input" data-type="search">
+                </form>
+                <ul data-role="listview" data-filter="true" data-input="#filterBasic-input" id="myList">
+
+                </ul>
+            </article>
+            <footer data-role="footer">
+                <h1>Contact List</h1>
+            </footer>
+        </section>
+        
+        <section data-role="page" id="newContactPage"  data-transition="flip" data-add-back-btn="true">
+            <header data-role="header">
+                <a href="#contactList" data-icon="carat-l">Back</a>
+                <h1> New Contact</h1>
+            </header>
+            <article data-role="content">
+                <form onsubmit="">
+                    <label>Name </label><input type="text" id="name" pattern="^[a-zA-Z\s]*$" required><br>
+                    <label>Phone</label><input type="text" id="phone" pattern="(01)[0-9]{9}" required><br>
+                    <label>Email</label><input type="email" id="email" required><br><br>
+                    <label for="flip">Gender:</label>
+                    <select name="flip" id="flip" data-role="slider">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                    <br><br>
+                    <a href="#contactList" class="ui-btn ui-btn-inline ui-icon-check ui-btn-icon-left" onclick="saveContact()" >Save</a>
+                    <a href="#contactList" class="ui-btn ui-btn-inline ui-icon-delete ui-btn-icon-left">Cancel</a>
+                </form>
+            </article>
+            <footer data-role="footer">
+                <h1> Contact List</h1>
+            </footer>
+        </section>
+        
+        <section data-role="page" id="contactProfile" data-add-back-btn="true">
+            <header data-role="header">
+                <a href="#contactList" data-icon="carat-l">Back</a>
+                <h1 id="contactName"> </h1>
+            </header>
+            <article data-role="content">
+                <form onsubmit="">
+                    <img src="female.png" height="100px" width="100px" alt="profile picture">
+                    <a href="#dialog" id="deleteBtn" class="ui-btn ui-btn-inline ui-icon-delete ui-btn-icon-left" data-transition="pop"></a>
+                    <a href="#newContactPage" class="ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-left" onclick="editContact()"></a>
+                    <a href="#" class="ui-btn ui-btn-inline ui-icon-phone ui-btn-icon-left"></a>
+                </form>
+            </article>
+            <footer data-role="footer">
+                <h1> Contact List</h1>
+            </footer>
+        </section>
+        
+        <section id="dialog" data-role="dialog" >
+            <article data-role="content">
+                <p>Delete Contact?</p><br>
+            </article>
+            <article id="buttons" data-role="content">
+                <a href="#contactList" class="ui-btn ui-btn-inline" onclick="deleteContact()">Delete</a>
+                <a class="ui-btn ui-btn-inline" data-transition="flip" >Delete</a>
+            </article>
+        </section>
+        
+        <script>
+            // $("#contactList").ready(loadContactList());
+            // var contactArray = new Array();
+
+            function Contact(name, phone, email, gender) {
+                this.name = name;
+                this.phone = phone;
+                this.email = email;
+                this.gender = gender;
+            }
+
+            function saveContact() {
+                var name = $("#name").val();
+                var phone = $("#phone").val();
+                var email = $("#email").val();
+                var gender = $("#flip").val();
+                var contact = new Contact(name, phone, email, gender);
+                // contactArray.push(contact);
+                var li = document.createElement("LI");
+                li.setAttribute("id", "item");
+                var div = document.createElement("DIV");
+                div.setAttribute("id", "div");
+                div.setAttribute("data-transition", "flip");
+                var nameBtn = document.createElement("BUTTON");
+                nameBtn.setAttribute("id", "nameBtn");
+                nameBtn.innerText = contact.name;
+
+                var callBtn = document.createElement("BUTTON");
+                callBtn.setAttribute("id", "callBtn");
+                callBtn.setAttribute("class", "ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-phone");
+                callBtn.setAttribute("data-role", "tel:" + contact.phone);
+                var imgBtn = document.createElement("IMG");
+                imgBtn.style.width = "100px";
+                imgBtn.style.height = "100px";
+                if (gender == "Female") {
+                    imgBtn.setAttribute("src", "src/female.png");
+                } else {
+                    imgBtn.setAttribute("src", "src/male.png");
+
+                }
+                div.appendChild(imgBtn);
+                div.appendChild(nameBtn);
+                div.appendChild(callBtn);
+                li.appendChild(div);
+                var ul = document.getElementById("myList");
+                ul.appendChild(li);
+            }
+
+            function deleteContact() {
+
+            }
+            function editContact() {
+
+            }
+
+        </script>
+
+    </body>
+</html>
