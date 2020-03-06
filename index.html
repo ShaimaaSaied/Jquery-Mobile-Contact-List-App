@@ -43,13 +43,14 @@ and open the template in the editor.
                     <label>Name </label><input type="text" id="name" pattern="^[a-zA-Z\s]*$" required><br>
                     <label>Phone</label><input type="text" id="phone" pattern="(01)[0-9]{9}" required><br>
                     <label>Email</label><input type="email" id="email" required><br><br>
-                    <label for="flip">Gender:</label>
-                    <select name="flip" id="flip" data-role="slider">
+                    <label for="gender">Gender:</label>
+                    <select data-role="slider" id="gender" name="flip">
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                     </select>
                     <br><br>
-                    <a href="#contactList" class="ui-btn ui-btn-inline ui-icon-check ui-btn-icon-left" onclick="saveContact()" >Save</a>
+                    <a href="#contactList" class="ui-btn ui-btn-inline ui-icon-check ui-btn-icon-left"
+                       onclick="saveContact()">Save</a>
                     <a href="#contactList" class="ui-btn ui-btn-inline ui-icon-delete ui-btn-icon-left">Cancel</a>
                 </form>
             </article>
@@ -65,10 +66,15 @@ and open the template in the editor.
             </header>
             <article data-role="content">
                 <form onsubmit="">
-                    <img src="female.png" height="100px" width="100px" alt="profile picture">
-                    <a href="#dialog" id="deleteBtn" class="ui-btn ui-btn-inline ui-icon-delete ui-btn-icon-left" data-transition="pop"></a>
-                    <a href="#newContactPage" class="ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-left" onclick="editContact()"></a>
-                    <a href="#" class="ui-btn ui-btn-inline ui-icon-phone ui-btn-icon-left"></a>
+                    <div id="conData">
+                        <img alt="profile picture" height="100px" id="profileImg" src="female.png" width="100px">
+                        <a class="ui-btn ui-btn-inline ui-icon-delete ui-btn-icon-left" data-transition="pop"
+                           href="#dialog" id="deleteBtn"></a>
+                        <a class="ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-left" href="#newContactPage"
+                           onclick="editContact()"></a>
+                        <a class="ui-btn ui-btn-inline ui-icon-phone ui-btn-icon-left" href="#"></a>
+                    </div>
+
                 </form>
             </article>
             <footer data-role="footer">
@@ -89,7 +95,7 @@ and open the template in the editor.
         <script>
             // $("#contactList").ready(loadContactList());
             // var contactArray = new Array();
-            var CurrentProfileContact; 
+            var CurrentProfileContact;
             function Contact(name, phone, email, gender,id) {
                 this.name = name;
                 this.phone = phone;
@@ -136,15 +142,15 @@ and open the template in the editor.
                 var name = $("#name").val();
                 var phone = $("#phone").val();
                 var email = $("#email").val();
-                var gender = $("#flip").val();
-                var contact = new Contact(name, phone, email, gender);
-                // contactArray.push(contact);
+                var gender = $("#gender").val();
+                var contact = new Contact(contactId, name, phone, email, gender);
+                //contactArray.push(contact);
                 createListItem(contact);
             }
 
             function deleteContact() {
                 $("#"+CurrentProfileContact.id ).remove();
-                
+
             }
             function editContact() {
 
