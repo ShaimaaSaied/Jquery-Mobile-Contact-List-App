@@ -83,14 +83,14 @@ and open the template in the editor.
         </article>
         <article id="buttons" data-role="content">
             <a href="#contactList" class="ui-btn ui-btn-inline" onclick="deleteContact()">Delete</a>
-            <a class="ui-btn ui-btn-inline" data-transition="flip">Delete</a>
+            <a class="ui-btn ui-btn-inline" data-transition="flip">Cancel</a>
         </article>
     </section>
 
     <script>
         // $("#contactList").ready(loadContactList());
         // var contactArray = new Array();
-        var CurrentProfileContact;
+        var CurrentProfileContact = new Contact();
 
         function Contact(name, phone, email, gender, id) {
             this.name = name;
@@ -108,8 +108,16 @@ and open the template in the editor.
             div.setAttribute("data-transition", "flip");
             var contactName = document.createElement("A");
             contactName.setAttribute("href", "#contactProfile");
-            contactName.setAttribute("onclick", "CurrentProfileContact=contact; setProfile();");
-
+            contactName.setAttribute("id", contact.name);
+            $("#"+CurrentProfileContact.name).on("click",function() {
+                CurrentProfileContact = contact;
+                console.log(contact);
+                $("#"+CurrentProfileContact.name).val(CurrentProfileContact.name);
+                if (CurrentProfileContact.gender == 'Female')
+                    $('#profilePicture').src = 'female.png';
+                else
+                    $('#profilePicture').src = 'male.png';
+            });
             contactName.innerText = contact.name;
             var callBtn = document.createElement("BUTTON");
             callBtn.setAttribute("id", "callBtn");
@@ -149,21 +157,23 @@ and open the template in the editor.
         }
 
         function deleteContact() {
+            console.log(CurrentProfileContact);
             $("#" + CurrentProfileContact.id).remove();
             history.back();
             CurrentProfileContact = undefined;
         }
 
-        function setProfile() {
+        /*function setProfile(contact) {
+            console.log(contact);
             $('#contactName').val(CurrentProfileContact.name);
             if (CurrentProfileContact.gender == 'Female')
                 $('#profilePicture').src = 'female.png';
             else
                 $('#profilePicture').src = 'male.png';
-        }
+        }*/
 
         function editContact() {
-            
+
         }
 
     </script>
