@@ -112,6 +112,7 @@ and open the template in the editor.
             div.setAttribute("id", "div");
             div.setAttribute("data-transition", "flip");
             var contactName = document.createElement("A");
+            contactName.setAttribute("id", contact.id + "Name");
             contactName.setAttribute("href", "#contactProfile");
             contactName.setAttribute("onclick", "CurrentProfileContact=contact; setProfile();");
 
@@ -149,7 +150,7 @@ and open the template in the editor.
                     var contact = new Contact(name, phone, email, gender, date.toUTCString());
                     createListItem(contact);
                 } else {
-
+                    document.getElementById(CurrentProfileContact.id + "Name").value = name;
                 }
             }
 
@@ -171,7 +172,7 @@ and open the template in the editor.
 
         /////////////////////////////////////////////////////////////////////////////////alaaa
 
-            var isSaved;
+            var isSaved = false;
 
             function editContact() {
                 document.getElementById("name").value = CurrentProfileContact.name;
