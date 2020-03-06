@@ -133,18 +133,19 @@ and open the template in the editor.
             }
         }
             function saveContact() {
-            var name = $("#name").val();
-            var phone = $("#phone").val();
-            var email = $("#email").val();
-            var gender = $("#flip").val();
-            var date = new Date();
-            date.setTime(date.getTime());
+                var name = $("#name").val();
+                var phone = $("#phone").val();
+                var email = $("#email").val();
+                var gender = $("#flip").val();
+                var date = new Date();
+                date.setTime(date.getTime());
+                if (!isSaved) {
+                    var contact = new Contact(contactId, name, phone, email, gender);
+                    createListItem(contact);
+                } else {
 
-            var contact = new Contact(name, phone, email, gender, date.toGMTString());
-
-            // contactArray.push(contact);
-            createListItem(contact);
-        }
+                }
+            }
 
         function deleteContact() {
             $("#" + CurrentProfileContact.id).remove();
@@ -152,25 +153,25 @@ and open the template in the editor.
             CurrentProfileContact = undefined;
         }
 
-        function setProfile(){
-            $('#contactName').val()=CurrentProfileContact.name;
-            if(CurrentProfileContact.gender=='Female')
-                $('#profilePicture').src='female.png';
-            else
-                $('#profilePicture').src='male.png';
-        }
+            function setProfile() {
+                $('#contactName').val() = CurrentProfileContact.name;
+                if (CurrentProfileContact.gender == 'Female')
+                    $('#profilePicture').src = 'female.png';
+                else
+                    $('#profilePicture').src = 'male.png';
+            }
 
-        function editContact() {
-            div.appendChild(imgBtn);
-            div.appendChild(contactName);
-            div.appendChild(callBtn);
+            var isSaved;
 
-            li.appendChild(div);
-            var ul = document.getElementById("myList");
-            ul.appendChild(li);
-        }
+            function editContact() {
+                document.getElementById("name").value = CurrentProfileContact.name;
+                document.getElementById("phone").value = CurrentProfileContact.phone;
+                document.getElementById("email").value = CurrentProfileContact.email;
+                document.getElementById("gender").value = CurrentProfileContact.gender;
+                isSaved = true;
+            }
 
-    </script>
+        </script>
 
 </body>
 
