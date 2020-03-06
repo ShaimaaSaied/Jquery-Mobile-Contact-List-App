@@ -111,6 +111,7 @@ and open the template in the editor.
                 div.setAttribute("id", "div");
                 div.setAttribute("data-transition", "flip");
                 var contactName = document.createElement("A");
+                contactName.setAttribute("id", "contactName");
                 contactName.setAttribute("href", "#contactProfile");
                 contactName.setAttribute("onclick","CurrentProfileContact=contact;")
                 contactName.innerText = contact.name;
@@ -143,17 +144,30 @@ and open the template in the editor.
                 var phone = $("#phone").val();
                 var email = $("#email").val();
                 var gender = $("#gender").val();
-                var contact = new Contact(contactId, name, phone, email, gender);
+
                 //contactArray.push(contact);
-                createListItem(contact);
+                if (!isSaved) {
+                    var contact = new Contact(contactId, name, phone, email, gender);
+                    createListItem(contact);
+                } else {
+
+                }
+
             }
 
             function deleteContact() {
-                $("#"+CurrentProfileContact.id ).remove();
+                $("#" + CurrentProfileContact.id).remove();
 
             }
-            function editContact() {
 
+            var isSaved;
+
+            function editContact() {
+                document.getElementById("name").value = CurrentProfileContact.name;
+                document.getElementById("phone").value = CurrentProfileContact.phone;
+                document.getElementById("email").value = CurrentProfileContact.email;
+                document.getElementById("gender").value = CurrentProfileContact.gender;
+                isSaved = true;
             }
 
         </script>
