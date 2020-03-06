@@ -5,26 +5,26 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <html>
-    <head>
-        <title></title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-        <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-    </head>
-    <body>
-        <section data-role="page" id="contactList" data-transition="flip" data-add-back-btn="true">
-            <header data-role="header">
-                <a href="#newContactPage" data-icon="plus">Add</a>
-                <h1> Contact List</h1>
-            </header>
-            <article data-role="content">
-                <form class="ui-filterable">
-                    <input id="filterBasic-input" data-type="search">
-                </form>
-                <ul data-filter="true" data-filter-placeholder="Search ..." data-input="#filterBasic-input"
-                    data-inset="true" data-role="listview" id="myList">
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+
+<body>
+    <section data-role="page" id="contactList" data-transition="flip" data-add-back-btn="true">
+        <header data-role="header">
+            <a href="#newContactPage" data-icon="plus">Add</a>
+            <h1> Contact List</h1>
+        </header>
+        <article data-role="content">
+            <form class="ui-filterable">
+                <input id="filterBasic-input" data-type="search">
+            </form>
+            <ul data-filter="true" data-filter-placeholder="Search ..." data-input="#filterBasic-input" data-inset="true" data-role="listview" id="myList">
 
                 </ul>
             </article>
@@ -104,73 +104,74 @@ and open the template in the editor.
                 this.id=id;
             }
 
-            function createListItem(contact) {
-                var li = document.createElement("LI");
-                li.setAttribute("id", contact.id);
-                var div = document.createElement("DIV");
-                div.setAttribute("id", "div");
-                div.setAttribute("data-transition", "flip");
-                var contactName = document.createElement("A");
-                contactName.setAttribute("id", "contactName");
+        function createListItem(contact) {
+            var li = document.createElement("LI");
+            li.setAttribute("id", contact.id);
+            var div = document.createElement("DIV");
+            div.setAttribute("id", "div");
+            div.setAttribute("data-transition", "flip");
+            var contactName = document.createElement("A");
+            contactName.setAttribute("id", "contactName");
                 contactName.setAttribute("href", "#contactProfile");
-                contactName.setAttribute("onclick","CurrentProfileContact=contact;")
-                contactName.innerText = contact.name;
-                var callBtn = document.createElement("BUTTON");
-                callBtn.setAttribute("id", "callBtn");
-                callBtn.setAttribute("class", "ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-phone");
-                callBtn.setAttribute("href", "tel:" + contact.phone);
-                callBtn.style.width = "30px";
-                callBtn.style.height = "50px";
-                var imgBtn = document.createElement("IMG");
-                imgBtn.style.width = "100px";
-                imgBtn.style.height = "100px";
-                if (contact.gender == "Female") {
-                    imgBtn.setAttribute("src", "female.png");
-                } else {
-                    imgBtn.setAttribute("src", "male.png");
+                contactName.setAttribute("onclick","CurrentProfileContact=contact;setProfile();");
 
-                }
-                div.appendChild(imgBtn);
-                div.appendChild(contactName);
-                div.appendChild(callBtn);
+            contactName.innerText = contact.name;
+            var callBtn = document.createElement("BUTTON");
+            callBtn.setAttribute("id", "callBtn");
+            callBtn.setAttribute("class", "ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-phone");
+            callBtn.setAttribute("href", "tel:" + contact.phone);
+            callBtn.style.width = "30px";
+            callBtn.style.height = "50px";
+            var imgBtn = document.createElement("IMG");
+            imgBtn.style.width = "100px";
+            imgBtn.style.height = "100px";
+            if (contact.gender == "Female") {
+                imgBtn.setAttribute("src", "female.png");
+            } else {
+                imgBtn.setAttribute("src", "male.png");
 
-                li.appendChild(div);
-                var ul = document.getElementById("myList");
-                ul.appendChild(li);
             }
-
+        }
             function saveContact() {
-                var name = $("#name").val();
-                var phone = $("#phone").val();
-                var email = $("#email").val();
-                var gender = $("#gender").val();
+            var name = $("#name").val();
+            var phone = $("#phone").val();
+            var email = $("#email").val();
+            var gender = $("#flip").val();
+            var date = new Date();
+            date.setTime(date.getTime());
 
-                //contactArray.push(contact);
-                if (!isSaved) {
-                    var contact = new Contact(contactId, name, phone, email, gender);
-                    createListItem(contact);
-                } else {
+            var contact = new Contact(name, phone, email, gender, date.toGMTString());
 
-                }
+            // contactArray.push(contact);
+            createListItem(contact);
+        }
 
-            }
+        function deleteContact() {
+            $("#" + CurrentProfileContact.id).remove();
+            history.back();
+            CurrentProfileContact = undefined;
+        }
 
-            function deleteContact() {
-                $("#" + CurrentProfileContact.id).remove();
+        function setProfile(){
+            $('#contactName').val()=CurrentProfileContact.name;
+            if(CurrentProfileContact.gender=='Female')
+                $('#profilePicture').src='female.png';
+            else
+                $('#profilePicture').src='male.png';
+        }
 
-            }
+        function editContact() {
+            div.appendChild(imgBtn);
+            div.appendChild(contactName);
+            div.appendChild(callBtn);
 
-            var isSaved;
+            li.appendChild(div);
+            var ul = document.getElementById("myList");
+            ul.appendChild(li);
+        }
 
-            function editContact() {
-                document.getElementById("name").value = CurrentProfileContact.name;
-                document.getElementById("phone").value = CurrentProfileContact.phone;
-                document.getElementById("email").value = CurrentProfileContact.email;
-                document.getElementById("gender").value = CurrentProfileContact.gender;
-                isSaved = true;
-            }
+    </script>
 
-        </script>
+</body>
 
-    </body>
 </html>
