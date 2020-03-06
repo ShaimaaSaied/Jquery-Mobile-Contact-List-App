@@ -151,7 +151,13 @@ and open the template in the editor.
                     var contact = new Contact(name, phone, email, gender, date.toUTCString());
                     createListItem(contact);
                 } else {
-                    document.getElementById(CurrentProfileContact.id + "Name").value = name;
+                    document.getElementById(CurrentProfileContact.id + "Name").innerText = name;
+                    document.getElementById(CurrentProfileContact.id + "callBtn").setAttribute("href", "tel:" + phone);
+                    if (gender == "Female") {
+                        document.getElementById(CurrentProfileContact.id + "imgBtn").setAttribute("src", "female.png");
+                    } else {
+                        document.getElementById(CurrentProfileContact.id + "imgBtn").setAttribute("src", "male.png");
+                    }
                 }
             }
 
