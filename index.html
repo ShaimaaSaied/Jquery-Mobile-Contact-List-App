@@ -146,7 +146,7 @@ and open the template in the editor.
                 var date = new Date();
                 date.setTime(date.getTime());
                 if (!isSaved) {
-                    var contact = new Contact(contactId, name, phone, email, gender);
+                    var contact = new Contact(name, phone, email, gender, date.toUTCString());
                     createListItem(contact);
                 } else {
 
