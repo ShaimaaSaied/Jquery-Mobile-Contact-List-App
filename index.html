@@ -124,8 +124,6 @@ and open the template in the editor.
                 imgBtn.setAttribute("src", "female.png");
             } else {
                 imgBtn.setAttribute("src", "male.png");
-
-
             }
             div.appendChild(imgBtn);
             div.appendChild(contactName);
@@ -157,7 +155,7 @@ and open the template in the editor.
         }
 
         function setProfile() {
-            $('#contactName').val() = CurrentProfileContact.name;
+            $('#contactName').val(CurrentProfileContact.name);
             if (CurrentProfileContact.gender == 'Female')
                 $('#profilePicture').src = 'female.png';
             else
@@ -165,13 +163,7 @@ and open the template in the editor.
         }
 
         function editContact() {
-            div.appendChild(imgBtn);
-            div.appendChild(contactName);
-            div.appendChild(callBtn);
-
-            li.appendChild(div);
-            var ul = document.getElementById("myList");
-            ul.appendChild(li);
+            
         }
 
     </script>
