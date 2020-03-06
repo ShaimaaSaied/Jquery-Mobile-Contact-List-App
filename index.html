@@ -23,7 +23,8 @@ and open the template in the editor.
                 <form class="ui-filterable">
                     <input id="filterBasic-input" data-type="search">
                 </form>
-                <ul data-role="listview" data-filter="true" data-input="#filterBasic-input" id="myList">
+                <ul data-filter="true" data-filter-placeholder="Search ..." data-input="#filterBasic-input"
+                    data-inset="true" data-role="listview" id="myList">
 
                 </ul>
             </article>
@@ -96,6 +97,39 @@ and open the template in the editor.
                 this.gender = gender;
             }
 
+            function createListItem(contact) {
+                var li = document.createElement("LI");
+                li.setAttribute("id", "item");
+                var div = document.createElement("DIV");
+                div.setAttribute("id", "div");
+                div.setAttribute("data-transition", "flip");
+                var contactName = document.createElement("A");
+                contactName.setAttribute("href", "#contactProfile");
+                contactName.innerText = contact.name;
+                var callBtn = document.createElement("BUTTON");
+                callBtn.setAttribute("id", "callBtn");
+                callBtn.setAttribute("class", "ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-phone");
+                callBtn.setAttribute("href", "tel:" + contact.phone);
+                callBtn.style.width = "30px";
+                callBtn.style.height = "50px";
+                var imgBtn = document.createElement("IMG");
+                imgBtn.style.width = "100px";
+                imgBtn.style.height = "100px";
+                if (contact.gender == "Female") {
+                    imgBtn.setAttribute("src", "female.png");
+                } else {
+                    imgBtn.setAttribute("src", "male.png");
+
+                }
+                div.appendChild(imgBtn);
+                div.appendChild(contactName);
+                div.appendChild(callBtn);
+
+                li.appendChild(div);
+                var ul = document.getElementById("myList");
+                ul.appendChild(li);
+            }
+
             function saveContact() {
                 var name = $("#name").val();
                 var phone = $("#phone").val();
@@ -103,34 +137,7 @@ and open the template in the editor.
                 var gender = $("#flip").val();
                 var contact = new Contact(name, phone, email, gender);
                 // contactArray.push(contact);
-                var li = document.createElement("LI");
-                li.setAttribute("id", "item");
-                var div = document.createElement("DIV");
-                div.setAttribute("id", "div");
-                div.setAttribute("data-transition", "flip");
-                var nameBtn = document.createElement("BUTTON");
-                nameBtn.setAttribute("id", "nameBtn");
-                nameBtn.innerText = contact.name;
-
-                var callBtn = document.createElement("BUTTON");
-                callBtn.setAttribute("id", "callBtn");
-                callBtn.setAttribute("class", "ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-phone");
-                callBtn.setAttribute("data-role", "tel:" + contact.phone);
-                var imgBtn = document.createElement("IMG");
-                imgBtn.style.width = "100px";
-                imgBtn.style.height = "100px";
-                if (gender == "Female") {
-                    imgBtn.setAttribute("src", "female.png");
-                } else {
-                    imgBtn.setAttribute("src", "male.png");
-
-                }
-                div.appendChild(imgBtn);
-                div.appendChild(nameBtn);
-                div.appendChild(callBtn);
-                li.appendChild(div);
-                var ul = document.getElementById("myList");
-                ul.appendChild(li);
+                createListItem(contact);
             }
 
             function deleteContact() {
