@@ -118,12 +118,13 @@ and open the template in the editor.
 
             contactName.innerText = contact.name;
             var callBtn = document.createElement("BUTTON");
-            callBtn.setAttribute("id", "callBtn");
+            callBtn.setAttribute("id", contact.id + "callBtn");
             callBtn.setAttribute("class", "ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-phone");
             callBtn.setAttribute("href", "tel:" + contact.phone);
             callBtn.style.width = "30px";
             callBtn.style.height = "50px";
             var imgBtn = document.createElement("IMG");
+            imgBtn.setAttribute("id", contact.id + "imgBtn");
             imgBtn.style.width = "100px";
             imgBtn.style.height = "100px";
             if (contact.gender == "Female") {
