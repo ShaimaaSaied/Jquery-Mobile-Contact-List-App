@@ -5,6 +5,7 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <html>
+
 <head>
     <title></title>
     <meta charset="UTF-8">
@@ -108,7 +109,7 @@ and open the template in the editor.
             var contactName = document.createElement("A");
             contactName.setAttribute("href", "#contactProfile");
             contactName.setAttribute("onclick", "CurrentProfileContact=contact; setProfile();");
-            
+
             contactName.innerText = contact.name;
             var callBtn = document.createElement("BUTTON");
             callBtn.setAttribute("id", "callBtn");
@@ -123,10 +124,19 @@ and open the template in the editor.
                 imgBtn.setAttribute("src", "female.png");
             } else {
                 imgBtn.setAttribute("src", "male.png");
-            
+
+
             }
+            div.appendChild(imgBtn);
+            div.appendChild(contactName);
+            div.appendChild(callBtn);
+
+            li.appendChild(div);
+            var ul = document.getElementById("myList");
+            ul.appendChild(li);
         }
-            function saveContact() {
+
+        function saveContact() {
             var name = $("#name").val();
             var phone = $("#phone").val();
             var email = $("#email").val();
@@ -145,15 +155,15 @@ and open the template in the editor.
             history.back();
             CurrentProfileContact = undefined;
         }
-        
-        function setProfile(){
-            $('#contactName').val()=CurrentProfileContact.name;
-            if(CurrentProfileContact.gender=='Female')
-                $('#profilePicture').src='female.png';
+
+        function setProfile() {
+            $('#contactName').val() = CurrentProfileContact.name;
+            if (CurrentProfileContact.gender == 'Female')
+                $('#profilePicture').src = 'female.png';
             else
-                $('#profilePicture').src='male.png';
+                $('#profilePicture').src = 'male.png';
         }
-        
+
         function editContact() {
             div.appendChild(imgBtn);
             div.appendChild(contactName);
