@@ -66,7 +66,7 @@ and open the template in the editor.
         <article data-role="content">
             <form onsubmit="">
                 <div id="conData">
-                    <img alt="profile picture" height="100px" id="profileImg" src="female.png" width="100px">
+                    <img alt="profile picture" height="100px" id="profileImg" width="100px">
                     <a class="ui-btn ui-btn-inline ui-icon-delete ui-btn-icon-left" data-transition="pop" href="#dialog" id="deleteBtn"></a>
                     <a class="ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-left" href="#newContactPage" onclick="editContact()"></a>
                     <a class="ui-btn ui-btn-inline ui-icon-phone ui-btn-icon-left" href="#"></a>
@@ -79,20 +79,20 @@ and open the template in the editor.
         </footer>
     </section>
 
-    <section id="dialog" data-role="dialog">
+    <section id="dialog" data-role="dialog" data-close-btn="right">
         <article data-role="content">
             <p>Delete Contact?</p><br>
         </article>
         <article id="buttons" data-role="content">
-            <a href="#contactList" class="ui-btn ui-btn-inline" onclick="deleteContact(this.id)">Delete</a>
-            <a class="ui-btn ui-btn-inline" data-transition="flip">Delete</a>
+            <a href="#contactList" class="ui-btn ui-btn-inline" onclick="deleteContact()">Delete</a>
+            <a class="ui-btn ui-btn-inline" data-transition="flip" onclick="$('#dialog').dialog('close');">Cancel</a>
         </article>
     </section>
 
     <script>
         // $("#contactList").ready(loadContactList());
         // var contactArray = new Array();
-        var CurrentProfileContact;
+        var CurrentProfileContactId;
 
         function Contact(name, phone, email, gender, id) {
             this.name = name;
@@ -101,7 +101,7 @@ and open the template in the editor.
             this.gender = gender;
             this.id = id;
         }
-        
+
         function createListItem(contact) {
             var li = document.createElement("LI");
             li.setAttribute("id", contact.id);
@@ -112,15 +112,7 @@ and open the template in the editor.
             contactName.setAttribute("id", contact.id + "Name");
             contactName.setAttribute("href", "#contactProfile");
             contactName.setAttribute("id", contact.name);
-            $("#" + CurrentProfileContact.name).on("click", function() {
-                CurrentProfileContact = contact;
-                console.log(contact);
-                $("#" + CurrentProfileContact.name).val(CurrentProfileContact.name);
-                if (CurrentProfileContact.gender == 'Female')
-                    $('#profilePicture').src = 'female.png';
-                else
-                    $('#profilePicture').src = 'male.png';
-            });
+            contactName.setAttribute("onclick", "setProfile(this.parentNode)");
             contactName.innerText = contact.name;
             var callBtn = document.createElement("BUTTON");
             callBtn.setAttribute("id", contact.id + "callBtn");
@@ -168,23 +160,22 @@ and open the template in the editor.
         }
 
         function deleteContact() {
-            console.log(CurrentProfileContact);
-            $("#" + CurrentProfileContact.id).remove();
-            history.back();
-            CurrentProfileContact = undefined;
+            $("#" + CurrentProfileContactId).remove();
+            $.mobile.changePage("#contactList", {
+                transition: "pop",
+                reverse: false,
+                changeHash: false
+            });
+            CurrentProfileContactId = undefined;
         }
 
-        /*function setProfile(contact) {
-            console.log(contact);
-            $('#contactName').val(CurrentProfileContact.name);
-            if (CurrentProfileContact.gender == 'Female')
-                $('#profilePicture').src = 'female.png';
-            else
-                $('#profilePicture').src = 'male.png';
-        }*/
+        function setProfile(div) {
+            document.getElementById("profileImg").setAttribute("src", document.getElementById(div.id).childNodes[0].getAttribute("src"));
+            document.getElementById("contactName").innerHTML = document.getElementById(div.id).childNodes[1].innerHTML;
+            CurrentProfileContactId = div.id;
+        }
 
         /////////////////////////////////////////////////////////////////////////////////alaaa
-
         var isSaved = false;
 
         function editContact() {
