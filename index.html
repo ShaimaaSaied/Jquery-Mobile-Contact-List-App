@@ -48,9 +48,12 @@ and open the template in the editor.
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                 </select>
+
                 <br><br>
-                <a href="#contactList" class="ui-btn ui-btn-inline ui-icon-check ui-btn-icon-left" onclick="saveContact()">Save</a>
+                <a class="ui-btn ui-btn-inline ui-icon-check ui-btn-icon-left" id="saveProfileBtn"
+                   onclick="saveContact()">Save</a>
                 <a href="#contactList" class="ui-btn ui-btn-inline ui-icon-delete ui-btn-icon-left">Cancel</a>
+                <label color="#FOO" id="err"></label>
             </form>
         </article>
         <footer data-role="footer">
@@ -67,7 +70,8 @@ and open the template in the editor.
             <form onsubmit="">
                 <div id="conData">
                     <img alt="profile picture" height="100px" id="profileImg" width="100px">
-                    <a class="ui-btn ui-btn-inline ui-icon-delete ui-btn-icon-left" data-transition="pop" href="#dialog" id="deleteBtn"></a>
+                    <a class="ui-btn ui-btn-inline ui-icon-delete ui-btn-icon-left" data-transition="pop" href="#dialog"
+                       id="deleteBtn"></a>
                     <a class="ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-left" href="#newContactPage" onclick="editContact()"></a>
                     <a id="call" data-icon="phone" data-role="button"></a>
                 </div>
@@ -102,27 +106,69 @@ and open the template in the editor.
             this.id = id;
         }
 
+        function validateName() {
+            let regName = /^[a-zA-Z\s]*$/;
+            if (!regName.test($("#name").val())) {
+                //  $("#err").val("Invalid name");
+                document.getElementById("err").innerText = "Invalid name";
+
+            }
+            return regName.test($("#name").val());
+        }
+
+        function validateEmail() {
+            let emailRegix = /^[A-Za-z0-9+_.-]+@(.+)$/;
+            if (!emailRegix.test($("#email").val())) {
+                // $("#err").val("Invalid email");
+                document.getElementById("err").innerText = "Invalid email";
+
+            }
+            return emailRegix.test($("#email").val());
+        }
+
+        function validatePhone() {
+
+            let phoneRegex = /(01)[0-9]{9}/;
+            for (var i = 0; i < contactArray.length; i++) {
+                if (contactArray[i].phone == $("#phone").val()) {
+                    // $("#err").val("duplicate phone no.");
+                    document.getElementById("err").innerText = "duplicate phone no.";
+                    return false;
+                }
+
+            }
+            if (!phoneRegex.test($("#phone").val())) {
+                // $("#err").val("Invalid phone");
+                document.getElementById("err").innerText = "Invalid phone";
+            }
+            return phoneRegex.test($("#phone").val());
+
+        }
+
         function createListItem(contact) {
             var li = document.createElement("LI");
             CurrentProfileContactId =
                 li.setAttribute("id", contact.id + "li");
             var div = document.createElement("DIV");
-            div.setAttribute("id", contact.id);
+            div.setAttribute("id", contact.id + "div");
             div.setAttribute("data-transition", "flip");
             var contactName = document.createElement("A");
             contactName.setAttribute("id", contact.id + "Name");
             contactName.setAttribute("href", "#contactProfile");
             contactName.setAttribute("onclick", "setProfile(this.parentNode)");
             contactName.innerText = contact.name;
-
+            // var callBtn= $("<a href='tel:" + contact.phone + "' data-role='button' data-icon='phone' " +
+            //      "class='ui-btn ui-btn-icon-notext ui-icon-phone' title=''></a>");
             var callBtn = document.createElement("A");
             callBtn.setAttribute("id", contact.id + "callBtn");
             callBtn.setAttribute("data-icon", "phone");
             callBtn.setAttribute("data-role", "button");
             callBtn.setAttribute("value", "00101010");
             callBtn.setAttribute("href", "tel:" + contact.phone);
-            callBtn.style.width = "30px";
-            callBtn.style.height = "50px";
+            callBtn.setAttribute("class", "ui-btn ui-btn-icon-notext ui-icon-phone");
+            // callBtn.style.width = "30px";
+            // callBtn.style.height = "50px";
+            callBtn.innerHTML = "call";
             var imgBtn = document.createElement("IMG");
             imgBtn.setAttribute("id", contact.id + "imgBtn");
             imgBtn.style.width = "100px";
@@ -142,24 +188,32 @@ and open the template in the editor.
         }
 
         function saveContact() {
-            var name = $("#name").val();
-            var phone = $("#phone").val();
-            var email = $("#email").val();
-            var gender = $("#gender").val();
-            var date = new Date();
-            date.setTime(date.getTime());
-            if (!isSaved) {
-                var contact = new Contact(name, phone, email, gender, date.toUTCString());
-                contactArray.push(contact);
-                createListItem(contact);
-            } else {
-                document.getElementById(CurrentProfileContactId + "Name").innerText = name;
-                document.getElementById(CurrentProfileContactId + "callBtn").setAttribute("href", "tel:" + phone);
-                if (gender == "Female") {
-                    document.getElementById(CurrentProfileContactId + "imgBtn").setAttribute("src", "female.png");
+            if (validateName() && validatePhone() && validateEmail()) {
+                //  $("#saveProfileBtn").setAttribute("href","#contactList");
+                document.getElementById("saveProfileBtn").setAttribute("href", "#contactList");
+                var name = $("#name").val();
+                var phone = $("#phone").val();
+                var email = $("#email").val();
+                var gender = $("#gender").val();
+
+
+                var date = new Date();
+                date.setTime(date.getTime());
+                if (!isSaved) {
+                    var contact = new Contact(name, phone, email, gender, date.getUTCMonth());
+                    contactArray.push(contact);
+                    createListItem(contact);
                 } else {
-                    document.getElementById(CurrentProfileContactId + "imgBtn").setAttribute("src", "male.png");
+                    document.getElementById(CurrentProfileContactId + "Name").innerText = name;
+                    document.getElementById(CurrentProfileContactId + "callBtn").setAttribute("href", "tel:" + phone);
+                    if (gender == "Female") {
+                        document.getElementById(CurrentProfileContactId + "imgBtn").setAttribute("src", "female.png");
+                    } else {
+                        document.getElementById(CurrentProfileContactId + "imgBtn").setAttribute("src", "male.png");
+                    }
                 }
+            } else {
+                alert("err");
             }
         }
 
