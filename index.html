@@ -60,7 +60,7 @@ and open the template in the editor.
 
     <section data-role="page" id="contactProfile" data-add-back-btn="true">
         <header data-role="header">
-            <a href="#contactList" data-icon="carat-l">Back</a>
+            <a href="#contactList" data-icon="carat-l" onclick="isSaved=false;">Back</a>
             <h1 id="contactName"> </h1>
         </header>
         <article data-role="content">
@@ -69,7 +69,7 @@ and open the template in the editor.
                     <img alt="profile picture" height="100px" id="profileImg" width="100px">
                     <a class="ui-btn ui-btn-inline ui-icon-delete ui-btn-icon-left" data-transition="pop" href="#dialog" id="deleteBtn"></a>
                     <a class="ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-left" href="#newContactPage" onclick="editContact()"></a>
-                    <a class="ui-btn ui-btn-inline ui-icon-phone ui-btn-icon-left" href="#"></a>
+                    <a id="call" data-icon="phone" data-role="button"></a>
                 </div>
 
             </form>
@@ -91,7 +91,7 @@ and open the template in the editor.
 
     <script>
         // $("#contactList").ready(loadContactList());
-        // var contactArray = new Array();
+        var contactArray = new Array();
         var CurrentProfileContactId;
 
         function Contact(name, phone, email, gender, id) {
@@ -104,19 +104,22 @@ and open the template in the editor.
 
         function createListItem(contact) {
             var li = document.createElement("LI");
-            li.setAttribute("id", contact.id);
+            CurrentProfileContactId =
+                li.setAttribute("id", contact.id + "li");
             var div = document.createElement("DIV");
-            div.setAttribute("id", "div");
+            div.setAttribute("id", contact.id);
             div.setAttribute("data-transition", "flip");
             var contactName = document.createElement("A");
             contactName.setAttribute("id", contact.id + "Name");
             contactName.setAttribute("href", "#contactProfile");
-            contactName.setAttribute("id", contact.name);
             contactName.setAttribute("onclick", "setProfile(this.parentNode)");
             contactName.innerText = contact.name;
-            var callBtn = document.createElement("BUTTON");
+
+            var callBtn = document.createElement("A");
             callBtn.setAttribute("id", contact.id + "callBtn");
-            callBtn.setAttribute("class", "ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-phone");
+            callBtn.setAttribute("data-icon", "phone");
+            callBtn.setAttribute("data-role", "button");
+            callBtn.setAttribute("value", "00101010");
             callBtn.setAttribute("href", "tel:" + contact.phone);
             callBtn.style.width = "30px";
             callBtn.style.height = "50px";
@@ -142,19 +145,20 @@ and open the template in the editor.
             var name = $("#name").val();
             var phone = $("#phone").val();
             var email = $("#email").val();
-            var gender = $("#flip").val();
+            var gender = $("#gender").val();
             var date = new Date();
             date.setTime(date.getTime());
             if (!isSaved) {
                 var contact = new Contact(name, phone, email, gender, date.toUTCString());
+                contactArray.push(contact);
                 createListItem(contact);
             } else {
-                document.getElementById(CurrentProfileContact.id + "Name").innerText = name;
-                document.getElementById(CurrentProfileContact.id + "callBtn").setAttribute("href", "tel:" + phone);
+                document.getElementById(CurrentProfileContactId + "Name").innerText = name;
+                document.getElementById(CurrentProfileContactId + "callBtn").setAttribute("href", "tel:" + phone);
                 if (gender == "Female") {
-                    document.getElementById(CurrentProfileContact.id + "imgBtn").setAttribute("src", "female.png");
+                    document.getElementById(CurrentProfileContactId + "imgBtn").setAttribute("src", "female.png");
                 } else {
-                    document.getElementById(CurrentProfileContact.id + "imgBtn").setAttribute("src", "male.png");
+                    document.getElementById(CurrentProfileContactId + "imgBtn").setAttribute("src", "male.png");
                 }
             }
         }
@@ -167,22 +171,37 @@ and open the template in the editor.
                 changeHash: false
             });
             CurrentProfileContactId = undefined;
+            isSaved = false;
         }
 
         function setProfile(div) {
             document.getElementById("profileImg").setAttribute("src", document.getElementById(div.id).childNodes[0].getAttribute("src"));
             document.getElementById("contactName").innerHTML = document.getElementById(div.id).childNodes[1].innerHTML;
+            var number;
+            for (var i = 0; i < contactArray.length; i++) {
+                if (contactArray[i].id == div.id) {
+                    number = contactArray[i].phone;
+                    break;
+                }
+            }
+            document.getElementById("call").setAttribute("href", "tel:" + number);
             CurrentProfileContactId = div.id;
+            isSaved = true;
         }
 
         /////////////////////////////////////////////////////////////////////////////////alaaa
         var isSaved = false;
 
         function editContact() {
-            document.getElementById("name").value = CurrentProfileContact.name;
-            document.getElementById("phone").value = CurrentProfileContact.phone;
-            document.getElementById("email").value = CurrentProfileContact.email;
-            document.getElementById("gender").value = CurrentProfileContact.gender;
+            for (var i = 0; i < contactArray.length; i++) {
+                if (contactArray[i].id == CurrentProfileContactId) {
+                    document.getElementById("name").value = contactArray[i].name;
+                    document.getElementById("phone").value = contactArray[i].phone;
+                    document.getElementById("email").value = contactArray[i].email;
+                    document.getElementById("gender").value = contactArray[i].gender;
+                    break;
+                }
+            }
             isSaved = true;
         }
 
